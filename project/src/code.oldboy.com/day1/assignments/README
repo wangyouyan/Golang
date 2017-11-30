@@ -1,0 +1,108 @@
+本周作业
+    要求: 使用fmt分别打印字符串、二进制、十进制、十六进制、浮点数
+
+本周知识点总结:
+    1. Go 语言开发环境设置，开发工具选择及配置
+        a. go 安装包下载及安装(参考:https://www.golangtc.com/download);
+        b. 设置环境变量；
+        c. GOPATH设置;
+        d. IDE开发工具,主要是vscode.
+
+    2. Go 基本命令介绍
+        a. go run 快速执行go文件,就像执行脚本一样;
+        b. go build 编译程序, 生成二进制可执行文件;
+        c. go install 安装可执行文件到bin目录;
+        d. go test 执行单元测试或压力测试;
+        e. go env 显示go相关的环境变量;
+        f. go fmt 格式化源代码
+
+    3. Go 程序结构
+        a. Go 源码按package进行组织, 并且package要放到非注释的第一行;
+        b. 一个程序只有一个main包和一个main函数;
+        c. main函数是程序的执行入口;
+    
+    4. 代码注释
+        a. 单行注释 //
+        b. 多行注释 /*   */
+
+    5. 垃圾回收
+        a. 内存自动回收， 不需要程序员管理内存;
+        b. 只需要new分配内存, 不需要释放
+
+    6. 天然的并发
+        a. Go 语言本身支持并发，非常简单;
+        b. goroutine, 轻量级线程, 创建成千上万个goroute成为可能;
+        c. 基于CSP(Communicating Sequential Process) 模型实现:
+            func calc() {
+                //大量计算
+            }
+            func main() {
+                go calc()
+            }
+
+    7. Channel (Go语言管道)
+        a. 管道， 类似于unix/linux中的pipe;
+        b. 多个goroute 之间通过channel进行通信;
+        c. 支持任何类型:
+            func main() {
+                pipe := make(chan int, 3)
+                pipe <- 1
+                pipe <- 2
+            }
+
+    8. 多返回值
+        a. 一个函数返回多个值
+            func calc(a int, b int) (int, int) {
+                sum := a + b
+                avg := (a+b)/2
+                return sum, avg
+            }
+
+    9. 开始Go语言的第一个程序Hello World,创建文件hello.go
+        a. 代码如下:
+            package main
+
+            import(
+                "fmt"
+            )
+
+            func main() {
+                fmt.Println("Hello World")
+            }
+
+    10. Go语言package包的概念
+        a. 和Python一样, 把相同功能的代码放到一个目录,称之为包;
+        b. 包可以被其它包引用;
+        c. main 包是用来生成可执行文件， 每个程序只有一个main包;
+        d. 包的主要用途是提高代码的可复用性.
+
+    11. 包的实战
+        package calc
+
+        func Add(a int, b int) int {
+            return a + b
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
