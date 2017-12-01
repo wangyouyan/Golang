@@ -1,21 +1,21 @@
 package content
 
-func PrintStr(oldboy string) string {
-	return oldboy
+func PrintStr(str string) string {
+	return str
 }
 
-// func PrintBinary(oldboy string) string {
-// 	return oldboy
-// }
+func PrintBinary(binary int) int {
+	return binary
+}
 
-// func PrintFloating(oldboy string) string {
-// 	return oldboy
-// }
+func PrintFloating(floatf float64) float64 {
+	return floatf
+}
 
-// func PrintDecimalism(oldboy string) string {
-// 	return oldboy
-// }
+func PrintDecimalism(decim int) int {
+	return decim
+}
 
-// func PrintSHexadecimal(oldboy string) string {
-// 	return oldboy
-// }
+func PrintSHexadecimal(hex int) int {
+	return hex
+}
