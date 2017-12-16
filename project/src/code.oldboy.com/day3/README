@@ -1,0 +1,38 @@
+//数组
+
+6. 越界
+7. 数组遍历
+    a. 下标遍历;
+    b. for ... range 也可以遍历
+8. 值类型
+    var a int
+    var b int
+
+    a = 100
+    b = a
+    b = 200
+    a = 
+
+    var a[5]int {1,2,3,4,5}
+    var b[5]int
+    b=a
+
+    	// _代表可以忽略的值
+	for index,_ := range a {
+		fmt.Printf("a[%d]=%d\n", index, a[index])
+	}
+
+9. 初始化
+    var c = [5]int{1,2,3}
+	fmt.Printf("%v\n", c)
+	// 字符串类型
+	var d [5]string = [5]string{1:"rain",2:"alex",3:"tom",4:"danier"}
+	fmt.Printf("%+v\n", d)
+
+
+    //备注: 数组是固定长度，切片是动态长度，底层也是一个数组，可以自动扩容.
+
+    
+
+
+	

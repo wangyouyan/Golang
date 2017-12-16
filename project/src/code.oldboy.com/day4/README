@@ -1,0 +1,218 @@
+一、课程大纲
+    1. 指针类型、函数、递归函数、闭包;
+    2. map数据结构
+    3. package介绍
+    4. 课后作业
+
+二、指针
+    1. 普通类型,变量存的就是值,也叫值类型.指针类型存的是地址
+    2. 获取变量的地址,用&，比如: var a int, 获取a的地址:&a
+    3. 指针类型,变量存的是一个地址,这个地址存的才是值
+    4. 获取指针类型所指向的值,使用*, 比如: var *p int, 使用*p获取p指向的值
+        var a int = 5
+        var p *int = &a    //oxefefefe   ==>   5
+    5. 指针类型:
+        a. 写一个程序,获取一个变量的地址,并打印到终端;
+        b. 写一个函数,传入一个int类型的指针,并在函数中修改所指向的值. 
+
+三、函数很类型
+    1. 内置函数
+        a. close: 主要用来关闭channel
+        b. len: 用来求长度,比如string、array、slice、map、channel
+        c. new: 用来分配内存,主要用来分配值类型,比如int、struct.返回的是指针
+        d. make: 用来分配内存,主要用来分配引用类型,比如chan、map、slice 
+        e. append: 用来追加元素到数组、slice中
+        f. panic和recover: 用来做错误处理
+        g. new和make的区别
+            new([]int)      *[]int      //返回的是指针，用来分配值类型
+            make([]int,0)   []int       //主要用来分配引用类型
+    2. 声明语法
+        func 函数名 (参数列表) [返回值类型] {}
+        代码示例:
+            func add(a,b) (int, int) {
+                return 
+            }
+    3. 函数特点
+        a. 不支持重载,一个包不能有两个名字一样的函数
+        b. 函数是一等公民，函数也是一种类型，一个函数可以赋值给变量
+        c. 匿名函数
+        d. 多返回值
+    4. 函数参数的传递方式
+        (备注: 1> 无论是值传递,还是引用传递,传递给函数的都是变量的副本,不过,值传递是值的拷贝.
+    引用传递是地址的拷贝,一般来说,地址拷贝更为高效.而值拷贝取决于拷贝的对象大小,对象越大,则性能越低.
+                2> map、slice、chan、指针、interface默认以引用的方式传递)
+        a. 值传递
+        b. 引用传递
+    5. _标识符,用来忽略返回值:
+        func calc(a,b int) (sum int,avg int) {
+            sum = a + b
+            avg = (a + b)/2
+            return
+        }
+        func main() {
+            sum,_ := calc(100,200)
+        }
+    6. 可变参数
+        //0个或多个参数
+        func add(arg...int) inr {
+
+        }
+        //1个或多个参数
+        func add(a int,arg...int) int {
+
+        }
+        //2个或多个参数
+        func add(a int,b int,arg...int) int {
+
+        }
+        //备注:arg是一个slice切片,我们可以通过arg[index]依次访问所有参数，
+        //通过len(arg)来判断传递参数的个数
+    7. defer用途
+        a. 当函数返回时,执行defer语句,因此可以用来做资源清理
+        b. 多个defer语句,按先进后出的方式执行
+        c. defer语句中的变量,在defer声明时就决定了.
+        d. 关闭文件句柄
+        e. 锁资源释放
+        f. 数据库连接释放
+    8. 递归函数
+        //解释: 一个函数调用自己,就叫做递归.
+        a. 代码示例:
+        package main
+        import (
+            "fmt"
+        )
+        func calc(n int) int {
+            if n == 1 {
+                return 1
+            }
+            return test(n-1)*n
+        }
+        func main() {
+            n := calc(5)
+            fmt.Println(n)
+        }
+        b. 递归函数的设计原则:
+            1> 一个大的问题能够分解成相似的小问题
+            2> 定义好出口条件
+    9. 闭包
+        a. 定义: 一个函数和与其相关环境组合而成的实体
+        b. 代码示例:
+            package main
+            import "fmt"
+            func Adder() func(int) int {
+                var x int
+                return func(delta int) int {
+                    x + delta
+                    return x
+                }
+            }
+            func main() {
+                var f = Adder() //相当于python里边类实例化
+                fmt.Print(f(1),"-")
+                fmt.Print(f(20),"-")
+                fmt.Print(f(300),"-")
+            }
+    10. 数组与切片之排序和查找操作
+        排序操作主要都在sort包中,导入就可以使用了
+        import ("sort")
+        a. sort.Ints对整数进⾏行行排序， sort.Strings对字符串串进⾏行行排序, sort.Float64s对浮点数进⾏行行排序.
+        b. sort.SearchInts(a []int, b int) 从数组a中查找b，前提是a必须有序
+        c. sort.SearchFloats(a []float64, b float64) 从数组a中查找b，前提是a必须有序
+        d. sort.SearchStrings(a []string, b string) 从数组a中查找b，前提是a必须有序
+
+四、map数据结构
+    1. map简介
+        key-value的数据结构,又叫字典或关联数组
+        a. 声明语法(声明是不会分配内存的，初始化需要make)
+            var map1 map[keytype]valuetype
+            var a map[string]string //key和字符串都是字符串
+            var a map[string]int    //key为字符串,value为int
+            var a map[int]string    //key为int,value为字符串
+            var a map[string]map[string]string //嵌套字典
+    2. map的相关操作
+        a. 定义
+            var a map[string]string = map[string]string{"hello","world"}
+            a = make(map[string]string,10)
+        b. 插入和更新
+            a["name"] = "Rain"
+        c. 查找
+            val, ok := a["name"] //var为map中key为name是否存在,ok为bool类型True或False
+        d. 遍历
+            for k,v := range a {
+                fmt.Println(k,v)
+            }
+        e. 删除
+            delete(a,"name") //删除为name的key
+        f. 长度
+            len(a) //取map的长度
+    3. map是引用类型
+        //定义了一个变量为a,类型为map的函数
+        func modify(a map[string]int) {
+            a["one"] = 123
+        }
+    4. slice of map (map的切片)
+        items := make([]map[int][int],5)
+        for i := 0;i<5;i++ {
+            items[i] = make(map[int][int])
+        }
+    5. map排序
+        a. 先获取所有key,把key进行排序
+        b. 按照排序好的key,进行遍历
+    6. map反转
+        a. 初始化另外一个mao,把key、value互换即可
+五、包
+    1. Golang中的包,目前标准的为150，覆盖几乎所有的基础库(参考golang.org有所有包的文档)
+    2. 获取第三方包:
+        go get http://github.com/websocket
+    
+六、 课后作业
+    1. 实现一个冒泡排序
+    2. 实现一个选择程序
+    3. 实现一个插入排序
+    4. 实现一个快速排序
+
+/*
+// 指针p 默认初始化nil
+func test3() {
+    var p *int
+    var b int
+    p = &b
+    *p = 200 
+}
+
+切片使用make，new
+
+
+不能直接给指针类型的变量赋值，因为初始化的时候，内存地址为空，
+避免这种情况，需要用以下两种方法:
+    a. 使用new开辟新内存;
+    b. 定义变量，中转以下.
+
+
+    可变参数:
+    1> 0个或多个参数
+    func add(arg...int) int {
+        return 
+    }
+    2> 1个或多个参数
+    func add(a int,arg...int) {
+        return
+    }
+    3> 两个或多个参数
+    func add(a int,b int,arg...int) int {
+        return
+    }
+    备注: 其中arg是一个切片
+
+    defer的用法
+    在printf前边，只要定义了defer,这条语句就会放在最后执行，代码示例:
+    func f() {
+	for i := 0;i<5;i++ {
+		defer fmt.Printf("%d\n",i)
+	}
+}
+
+
+//匿名函数
+不定义函数名的函数叫做匿名函数
+*/
