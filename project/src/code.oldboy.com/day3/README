@@ -1,38 +1,207 @@
-//数组
+//课程内容——数组和切片
+1. 数组类型
+2. 切片类型
+3. 时间和日期
+4. 课后作业
 
-6. 越界
-7. 数组遍历
-    a. 下标遍历;
-    b. for ... range 也可以遍历
-8. 值类型
-    var a int
-    var b int
+一、数组类型
+    1. 定义:  var 变量名 [len]type
+              var nums [10]int
+              var str [10]string
+              var floating [5]float32
+              var buer [10]bool
+    2. 如何访问数组中的元素?
+        使用下标访问,比如: a[0]访问第一个元素.长度为5的数组访问如下:
+        a[0], a[1], a[2], a[3], a[4]
+    3. 数组的内存布局
+        |--|--|--|--|--|         连续内存空间
+        |--|--|--|--|--|
+    4. 数组长度
+        var slice [10]int
+        length := len(slice) //取素组sliced的长度
+    5. 越界
+        var slice [10]int
+        数组slice的长度为10,下标范围为0到9，那访问0到9之外的下标会有什么问题呢?
+        panic: runtime error: index out of range
+    6. 数组遍历
+        a. 下标遍历;
+        b. for ... range 也可以遍历
+            // _代表可以忽略的值
+            for index,_ := range a {
+                fmt.Printf("a[%d]=%d\n", index, a[index])
+                }
+    7. 值类型
+        var a int
+        var b int
 
-    a = 100
-    b = a
-    b = 200
-    a = 
+        a = 100
+        b = a
+        b = 200
+        a = ?   //第一次赋值给b的时候，是拷贝a的值,当b被重新赋值的时候,a的值是不变的。因此a仍然是100
 
-    var a[5]int {1,2,3,4,5}
-    var b[5]int
-    b=a
+        var a[5]int {1,2,3,4,5}
+        var b[5]int
+        b=a
+        b[0] = 200
+        a[0] = ?    //当把数组a赋值给b的时候,相当于一次内存拷贝,So当给b[0]赋值200的时候，对数组a是没有任何影响的。a[0]仍然是1
+    8. 初始化
+        var c = [5]int{1,2,3}
+        fmt.Printf("%v\n", c)
+        // 字符串类型
+        var d [5]string = [5]string{1:"rain",2:"alex",3:"tom",4:"danier"}
+        fmt.Printf("%+v\n", d)
+        //备注: 数组是固定长度，切片是动态长度，底层也是一个数组，可以自动扩容.
+    9. 二维数组
+        var a[8][2]int  
+        // 练习
+        a. 写一个程序,生成100个随机数,并存放到数组中.最后,把数组打印到屏幕上.
+        b. 写一个程序,随机生成100个字符串,并存放到数组中.最后输出到屏幕上.
 
-    	// _代表可以忽略的值
-	for index,_ := range a {
-		fmt.Printf("a[%d]=%d\n", index, a[index])
-	}
+二、 切片类型
+    1. 定义:
+        var 变量名 []type
+    2. 举例
+        var a []int
+        var a []string
+        var a []float32
+        var a []bool
+    3. 切片初始化
+        var a [5]int
+        var b []int = a[0:2]
 
-9. 初始化
-    var c = [5]int{1,2,3}
-	fmt.Printf("%v\n", c)
-	// 字符串类型
-	var d [5]string = [5]string{1:"rain",2:"alex",3:"tom",4:"danier"}
-	fmt.Printf("%+v\n", d)
+        var a [5]int
+        a[start:end]
+    4. 举例
+        var a [5]int
+        var b []int = a[0:1]
+        var b []int = a[0:5]
+        var b []int = a[0:]
+        var b []int = a[:3]
+        var b []int = a[:]
+    5. 切片初始化
+        var b[]int = []int{1,2,3,4,5}
+    6. 遍历
+        a. 下标遍历
+        b. for...range
+    7. 思考题
+        var a [5]int 
+        var b = a[1:3]
+        a[0] = 100
+        a[1] = 200
+        b[0] = ?
+        b[1] = ?
 
+        var a [5]int 
+        var b = a[1:3]
+        b[0] = 100
+        b[1] = 200
+        a[0] = ?
+        a[1] = ?
+    8. 切片的内存布局
+        x := []int {2,3,5,7,11}
+        图片见PPT第13页
+    9. 切片的好处
+        写一个函数，用来求一个数组的所有元素之和?
+    10. 切片创建
+        make([]type, len, cap)      make([]type,len)
 
-    //备注: 数组是固定长度，切片是动态长度，底层也是一个数组，可以自动扩容.
+        var b []int
+        b = make([]int, 5, 10)
+    11. make参数len和cap的理解
+        package main
 
-    
+        import "fmt"
 
+        func main() {
+            var a []int = make([]int,5,10)
+            a[4] = 100
+            b := a[0:10]
+            b[9] = 100
+            fmt.Printf("%v", a)
+            fmt.Printf("%v", b)
+        }
+        //执行结果如下:
+        [0 0 0 0 100]
+        [0 0 0 0 100 0 0 0 0 100]
+    12. 内置函数,cap和len
+        var ar = [10]int{0,1,2,3,4,5,6,7,8,9}
+        b = ar[5:7]
+        b的各个元素以及长度和容量分别是多少?  元素是[5,6],长度是2,容量cap是5
+        b = ar[0:4]
+        b的各个元素以及长度和容量分别是多少?  元素是[0,1,2,3],长度是4,容量cap是10
+    13. reslice,在切片的基础上再切片
+        可以用来扩容和缩容
+        package main
+
+        import "fmt"
+
+        func main() {
+            var a []int = make([]int, 5, 10)
+            a[4] = 100
+            b := a[0:10]
+            b[9] = 100
+            fmt.Printf("%v\n", a)
+            fmt.Printf("%v\n", b)
+        }
+        // 执行结果如下:
+        [0 0 0 0 100]
+        [0 0 0 0 100 0 0 0 0 100]
+    14. 切片copy和append操作
+        // copy code example
+            package main
+            import "fmt"
+            func main() {
+                s1 := []int{1,2,3}
+                s2 := make([]int, 10)
+                copy(s2,s1)
+            }
+        //append code example
+            package main
+            import "fmt"
+            func main() {
+                s1 := []int{1,2,3}
+                append(s1,1,2,3)
+            }
+    15. 字符串的内存布局
+        s := "hello"
+        // 原理见PPT第20页
+        //底层是用切片实现!
+    16. 如何修改一个字符串?
+    17. 写一段程序实现字符串反转?
+    18. string, byte以及rune之间的区别?
+    19. 如何统计一个中文字符串里边中文的个数?
+
+三、 时间和日期类型
+    1. time包
+    2. time.Time类型， 用来表示时间
+    3. 获取当前时间, now := time.now()
+    4. time.Now().Day, time.Now().Minute(), time.Now().Month(), time.Now().Year()
+    5. 格式化, fmt.Printf(“%02d/%02d%02d %02d:%02d:%02d", now.Year())
+    6. time.Duration 用来表示纳秒
+    7. 一些常量:
+        const (
+            Nanosecond Duration = 1
+            Microsecond = 1000 * Nanosecond
+            Millisecond = 1000 * Microsecond
+            Second = 1000 * Millisecond
+            Minute = 60 * Second
+            Hour = 60 * Minute    
+        )
+    8. 格式化:
+        now := time.Now()
+        fmt.Println(now.Format(“02/1/2006 15:04”))
+        fmt.Println(now.Format(“2006/1/02 15:04”))
+        fmt.Println(now.Format(“2006/1/02”))
+    9. 写一个程序，获取当前时间，并格式化成2017/06/15 08:05:00形式
+    10. 写一个程序，统计一段代码的执行耗时， 单位精确到微妙
+
+四、 课后作业
+    1. 编写程序，在终端输出九九乘法表。
+    2. ⼀一个数如果恰好等于它的因⼦子之和，这个数就称为“完数”。例例如6=1＋2＋3.
+    编程找出1000以内的所有完数。
+    3. 输⼊入⼀一个字符串串，判断其是否为回⽂文。回⽂文字符串串是指从左到右读和从右到
+    左读完全相同的字符串串。
+    4.输⼊入⼀一⾏行行字符，分别统计出其中英⽂文字⺟母、空格、数字和其它字符的个数。
+    5. 计算两个⼤大数相加的和，这两个⼤大数会超过int64的表示范围.
 
 	

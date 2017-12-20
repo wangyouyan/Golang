@@ -91,11 +91,21 @@ func GetRandomString() {
 	}	
  }
 
+ func arr(s []int) {
+	 length := len(s)
+	//  for i := 0;i <= length;i ++ {
+	// 	 return
+	//  }
+	 fmt.Print(s[length+1])
+ }
+
 func main() {
 	// array_test1()
 	// array_test2()
 	// test3()
 	// test4()
 	// generateRandoms()
-	GetRandomString()
+	// GetRandomString()
+	test_data := []int{8,2,4,1,7,5,3,9,0,6}
+	arr(test_data)
 }
