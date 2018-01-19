@@ -1,0 +1,167 @@
+一、 课程提纲
+    1. 结构体和方法
+    2. 前缀搜索项目
+    3. 敏感词过滤项目
+    4. 课后作业
+
+二、 结构体和方法
+    1. Go中的struct
+        a. 用来自定义复杂数据结构;
+        b. struct里边可以包含多个字段(属性),字段可以是任意类型;
+        c. struct类型可以定义方法， 注意和函数的区别;
+        d. struct类型是值类型;
+        e. struct类型可以嵌套;
+        f. Go语言中没有class类型, 只有struct类型;
+    2. struct的定义
+        a. struct声明:
+            e.g: 
+                type Student struct {
+                    Name string
+                    Age int
+                    Score
+                }
+        b. struct中字段访问: 和其它语言一样，使用点"."
+            e.g: 
+                var stu Student
+                stu.Name = "Rain"
+                stu.Age = 28
+                stu.Score = 99
+
+                fmt.Printf("name=%s age=%d score=%d",stu.Name, stu.Age, stu.Age)
+        c. struct定义的三种形式:
+            1> var stu Student
+            2> var stu *Student = new(Student)
+            3> var stu *Student = &Student{}
+            备注:
+                I. 其中b和c返回的都是指向结构体的指针，访问形式如下:
+                    (1) stu.Name, stu.Age和stu.Score或者
+                        (*stu).Name, (*stu).Age等
+            4> struct的内存布局: struct中的所有字段在内存是连续的， 布局如下:
+                type Rect1 {Min, Max Point}
+                type Rect2 {Min, Max *Point}
+            5> 链表定义
+                type Student struct {
+                    Name string
+                    Next* Student
+                }       
+                备注: 每个节点包含下一个节点的地址,这样把所有的节点串起来了，通常把链表中的第一个节点叫做链表头
+            6> 双链表定义
+                type Student struct {
+                    Name string
+                    Next* Student
+                    Prev* Student
+                }
+                备注: 如果有两个指针分别指向前一个节点和后一个节点，我们叫做双链表
+            7> 二叉树定义
+                type Student struct {
+                    Name string
+                    left* Student
+                    righr* Student
+                }
+                备注: 如果每个节点有两个指针分别用来指向左子树和右子树, 我们把这样的结构叫做二叉树
+            8> 结构体是用户单独定义的类型, 不能和其它类型进行强制转换
+                type Student struct {
+                    Number int
+                }
+
+                type Stu Student //匿名
+                var a Student
+                a = Student(30)
+                var b Stu
+                a = b
+             9> 工厂模式 
+                golang中的struct没有构造函数, 一般可以使用工厂模式来解决这个问题
+                package model 
+                type student struct {
+                    Name string
+                    Age int
+                }   
+                func NewStudent(name string, age int) *student {
+                    return &student{
+                        Name: name
+                        Age: age
+                    }
+                }
+
+                package main
+                S := new(student)
+                S := model.NewStudent("tony",20)
+
+            10> 再次强调
+                I. make 用来分配map、 slice、 channel类型的内存;
+                II. new 用来分配值类型的内存.
+
+            11> struct中的tag
+                我们可以为struct中的每个字段， 写上一个tag.这个tag可以通过反射的机制获取到, 最常用的场景就是json序列化和反序列化
+                type student struct {
+                    Name string `json="name"`
+                    Age int `json="age"`
+                }
+            12> 匿名字段
+                结构体中字段可以没有名字, 即匿名字段
+                    type Car struct {
+                        Name string
+                        Age int
+                    }
+
+                    type Train struct {
+                        Car
+                        Start time.Time
+                        int
+                    }
+            13 > 匿名字段冲突处理
+                    type Car struct {
+                        Name string
+                        Age int
+                    }
+
+                    type Train struct {
+                        Car
+                        Start time.Time
+                        Age int // Age在上边已经定义
+                    }
+
+                    type A struct {
+                        a int
+                    }
+                    type B struct {
+                        a int
+                        b int
+                    }
+                    type C struct {
+                        A
+                        B
+                    }
+            14> 方法————Golang语言中的任何自定义类型, 都可以有方法, 而不仅仅是struct
+                定义: func (recevier type) methodName(参数列表)(返回值列表){}
+            15> 方法的调用
+                type A struct {
+                    a int
+                }        
+
+                func (this A) test() {
+                    fmt.Println(this.a)
+                }   
+            
+                var A
+                t.test()
+            16> 方法和函数的区别
+                未解答
+
+            17> 指针receiver和值receiver
+                本质上和函数的值传递和地址传递是一样的
+            18> 方法的访问控制，通过大小写控制
+                大写可以被其它程序调用，小写为内部调用.
+            19> 继承
+                如果一个结构体struct嵌套了另一个匿名结构体, 那么这个结构可以直接访问匿名结构体的方法，从而实现了继承.
+            20> 组合和匿名字段
+                如果一个结构体struct嵌套了另一个有名结构体， 那么这个模式就叫组合.
+            21> 多重继承
+                如果⼀一个struct嵌套了了多个匿匿名结构体，那么这个结构可以直接访问多个匿匿名结构体的⽅方法，从⽽而实现了了多重继承.
+三、 课后作业
+    1. 实现一个图书管理系统， 具有以下功能:
+        a. 书籍录⼊入功能，书籍信息包括书名、副本数、作者、出版⽇日期
+        b. 书籍查询功能，按照书名、作者、出版⽇日期等条件检索
+        c. 学⽣生信息管理理功能，管理理每个学⽣生的姓名、年年级、身份证、性别、借了了什什么书等信息
+        d. 借书功能，学⽣生可以查询想要的书籍，进⾏行行借出
+        e. 书籍管理理功能，可以看到每种书被哪些⼈人借出了了
