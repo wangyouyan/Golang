@@ -1,3 +1,316 @@
-今天课程内容
+# 课程内容 #
+    . 数据类型和操作符
+    . Go程序基本结构
+    . 变量和常量
+    . 条件判断和循环
+    . 字符串类型
+一、 数据类型和操作符
+    1. 布尔类型
+        a. var b bool 和 var b bool = true 和 var b = true
+        b. 操作符== 和 !=
+        c. 取反操作符: !b
+        d. &&和||操作符
+        e. 格式化输出占位符: %t
+    2. 整数和浮点类型
+        a. int8, int16, int32, int64
+        b. unit8, unit16, unit32, unit64
+        c. int和unit, 和操作系统平台有关
+        d. float32和float64浮点类型
+        e. 所有整数初始化为0， 所以浮点数初始化为0.0, 布尔类型初始化为false
+        注意事项：
+            1) Go是强类型语言, 不同类型相加以及赋值是不允许的
+            2) 那怎么样才能实现, 不同类型相加呢?
+            3) 输出占位符: 整数%d, %x十六进制, %f浮点数
+    3. 复数类型
+        a. 两种形式: complex64和complex128
+        b. var c complex64 = 5 + 10i
+        c. 内置函数 complex(re, im)构造一个复数
+        d. 万能输出占位符: %v
+    4. 位运算(位操作符)
+        a. 与操作: &
+            1 & 1 = 1
+            1 & 0 = 0
+            0 & 1 = 0
+            0 & 0 = 0
+        b. 或操作: |
+            1 | 1 = 1
+            1 | 0 = 1
+            0 | 1 = 1
+            0 | 0 = 0
+        c. 异或: ^
+            1 ^ 1 = 0
+            1 ^ 0 = 1
+            0 ^ 1 = 1
+            0 ^ 0 = 0
+        d. 左移 <<
+            1 << 10 = 1024
+            1 << 20 = 1M
+            1 << 30 = 1G
+        e. 右移 >>
+            1024 >> 10 = 1
+            1024 >> 1 = 512
+            1024 >> 2 = 256
+        f. 位操作符操作实战
+            a. 微博用户特产与位操作
+                1> 微博红名
+                2> 微博达⼈人
+                3> Vip会员
+                4> vip超级会员
+                5> 蓝钻⽤用户
+                6> 红钻⽤用户
+    5. 操作符
+        a. 逻辑操作符, ==, !=, <, <=, >=
+        b. 算数操作符, +, -, *, /, %
 
-1. aaaaa
+二、 Go程序基本结构
+
+	1.     Go程序的基本结构代码示例一
+
+            
+package main
+/*
+    a. 任何一个代码文件隶属于一个包
+    b. import 关键字， 引用其它包
+    c. Golang 可执行程序, package main并且有且只有一个main入口函数
+    d. 包中函数调用:
+        1> 同一个包中, 直接调用
+        2> 不同包中函数, 通过包名+点+函数名进行调用
+    e. 包访问控制规则
+        1> 大写意味着这个函数/变量是可导出
+        2> 小写意味着这个函数/变量是私有的，包外部不能访问
+*/
+import "fmt"
+
+func main() {
+    fmt.Println("Hello World")
+}
+
+	1.  Go程序的基本结构代码示例二
+
+package main
+/*
+    一个程序包含两个包, add和main, 其中add包中有两个变量: Name和age.请问main包中如何访问Name和age?
+*/
+import (
+    "add"
+)
+
+func main() {
+    fmt.Println("result", add.Name)
+    fmt.Println("result", add.age)
+}
+
+	1.     Go程序的基本结构代码示例三
+
+package main
+/*
+    包别名的应用, 开发一个程序，使用包别名来访问包中的函数
+*/
+import (
+    a "add"
+)
+
+func main() {
+    fmt.Println("result", a.Name)
+    fmt.Println("result", a.age)
+}
+
+	1. Go程序的基本结构代码示例四
+
+package main
+/*
+    每个包都可以包含一个init函数, 这个init函数自动被go运行框架调用.开发一个程序演示这个功能?
+*/
+import (
+    _"add"
+)
+
+func init() {
+    fmt.Println("initalized")
+}
+三、 变量和常量
+
+	1. 常量
+
+            a.  常量使用const修饰, 代表永远是只读的， 不能修改;
+            b.  const只能修饰boolean, number (int相关类型、浮点类型、complex)和string;
+            c.  语法: const identified [type] = value, 其中type可以省略;
+                
+例如:
+    const b string = "hello world"
+    const b = "hello world"
+    const Pi = 3.1414926
+    const a = 9/
+            d.  比较优雅的写法: 
+const (
+    a = 1
+    b = 2
+    c = 3
+)
+            e. 更加专业的写法
+const (
+    a = iota //iota初始值为0,以下自动加1
+    b
+    c
+)
+
+const (
+    a = 1 << iota
+    b
+    c
+)
+        f. 常量练习
+package main
+/*
+    定义两个常量量Man=1和Female=2，获取当前时间的秒数，如果能被Female整除，则在终端打印female，否则打印man。
+*/
+
+import(
+    "fmt"
+    "time"
+)
+
+const (
+    Male = 1
+    Female = 2
+)
+
+func main() {
+    now := time.Now()
+    second := now.Unix()
+    if second % Female == 0 {
+        fmt.Println("%d female", second)
+    } else {
+        fmt.Println("%d man", second)
+    }
+
+}
+
+	1. 变量
+
+        a. 语法: var identified type
+代码示例一        
+var a int
+var b string
+var c bool
+var d int = 8
+var e string = "hello"
+代码示例二
+var (
+    a int                     // 0
+    b string                 // ""
+    c bool                  // false
+    d int                  // 8
+    e string = "hello"    //hello
+)
+
+四、 条件判断和循环
+
+	1.     if 语句一
+
+if condition1 {
+    //do something
+} else if condition2 {
+    //do something else
+} else {
+    // catch-all or default
+}
+
+	1. if 语句二
+
+if true {
+}
+
+if a == 1 && b == 1 {
+}
+
+if b < 0 || b > 10 {
+}
+
+if c != 0 {
+}
+
+	1. if语法糖
+
+// 写法一
+var b = 100
+if b > 100 {
+}
+// 写法二
+if b := 100; b>200 {
+}
+
+	1. for 循环  
+
+/*1) 初始化==>条件==> 修改
+for init;condition;modify{
+}
+*/
+/*
+    for condition {
+}
+*/
+/*
+    for {
+}
+*/
+// for range: 遍历数组、切片、map、管道等类型
+for index, val := range str {}
+
+	1. break和continue
+
+
+for {
+    if i > 10 {
+        break
+}
+}
+
+for {
+    if i > 10 {
+        continue
+}
+}
+五、 字符串类型
+
+	1. 声明
+
+var b string
+var b = "hello"
+var b string = "hello"
+
+
+	1. 字符串的两种表示方式
+
+            a. 双引号， "", 可以包含控制字符
+            b. 反引号, ``, 所有字符都是原样输出
+package main 
+
+import (
+    "fmt"
+)
+
+func main() {
+    var str = "hello world\n\n"
+    var str1 = `hello world \n\n`
+
+    fmt.Println("str=", str)
+    fmt.Println("str1=", str1)
+}
+
+	1. 字符串常用操作
+
+a. 长度: len(str)
+b. 拼接: +, fmt.Spintf
+c. 分割: string.Split
+d. 包含: strings.Contains
+e. 前缀或后缀判断: strings.HasPrefix, strings.HasSuffix
+f. 子串穿线的位置: strings.Index(), strings.LastIndex()
+g. join操作: strings.Join(a[]string, se string)
+
+六、 课后作业
+
+	1.  判断 101-200 之间有多少个素数，并输出所有素数。
+	2. 打印出100-999中所有的“⽔水仙花数”，所谓“⽔水仙花数”是指⼀一个三位数，其各位数字⽴立⽅方和等于该数本身。例例如：153 是⼀一个“⽔水仙花数”，因为 153=1 的三次⽅方＋5 的三次⽅方＋3 的三次⽅方。
+	3. 对于⼀一个数n，求n的阶乘之和，即： 1！ + 2！ + 3！+…n!
+
